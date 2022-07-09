@@ -1,21 +1,30 @@
 "use scrict";
 
 const numOfQuestions = 2; /*constant that have number of questions about films*/
-let numberOfFilms = 0;
+let numberOfFilms;
 
-while(true)
-{
-    numberOfFilms = prompt(`Скільки фільмів ви вже подивились?`,``);
-
-    if( numberOfFilms == null || numberOfFilms.length == 0 || numberOfFilms.length >50)
+/*Function that checks input string for conditions*/
+function inputCheck(check){
+    if(check==null || check=='' || check.length>50) 
     {
-        console.log(`Помилка!`);
-    }
-    else
-    {
-        break;
+        return false;
+    }else{
+        return true;
     }
 }
+
+function NumOfFilmsInputCheck() {
+
+    while(true)
+    {
+        numberOfFilms = prompt(`Скільки фільмів ви вже подивились?`,``);
+        if(inputCheck(numberOfFilms) && !isNaN(numberOfFilms))break;
+    }
+
+}
+
+NumOfFilmsInputCheck();
+
 const personalMovieDB = {
     count: numberOfFilms,
     movie: {},
@@ -24,22 +33,63 @@ const personalMovieDB = {
     private:false
 };
 
-for(let numOfMovies=0;numOfMovies<numOfQuestions;numOfMovies++)
+function addLastSeenFilm()
 {
-    const firstQuestion = prompt(`Останній переглянутий фільм?`,``);
-    const secondQuestion = prompt(`Скількі балів ви дасте цьому фільму?`,``);
-    
-    if(firstQuestion!=null && secondQuestion !=null && firstQuestion!='' && secondQuestion!='' && firstQuestion.length<50)
+    for(let numOfMovies=0;numOfMovies<numOfQuestions;numOfMovies++)
     {
-    personalMovieDB.movie[firstQuestion] = secondQuestion;
-    }else{
-        alert(`Помилка!`);
+        let firstQuestion,
+            secondQuestion;
+
+        while(true)
+        {
+            firstQuestion = prompt(`Останній переглянутий фільм?`,``);
+            if(inputCheck(firstQuestion))break;
+        }
+
+        while(true)
+        {
+            secondQuestion = prompt(`Скількі балів ви дасте цьому фільму?`,``);
+            if(inputCheck(secondQuestion) && !isNaN(secondQuestion))break;
+        }
+    
+        personalMovieDB.movie[firstQuestion] = secondQuestion;
+        
     }
 }
 
-if(personalMovieDB.count<10){alert(`Доволі мало фільмів переглянуто`);}
-else if(personalMovieDB.count>=10 && personalMovieDB.count<=30 ){alert(`Ви типовий глядач!`);}
-else if (personalMovieDB.count>30){alert(`Ви кіноман!`);}
-else {alert(`Помилка!`);}
+addLastSeenFilm();
 
-console.log(personalMovieDB);
+function checkPersonalLevel(){
+    if(personalMovieDB.count<10){alert(`Доволі мало фільмів переглянуто`);}
+    else if(personalMovieDB.count>=10 && personalMovieDB.count<=30 ){alert(`Ви типовий глядач!`);}
+    else if (personalMovieDB.count>30){alert(`Ви кіноман!`);}
+    else {alert(`Помилка!`);}
+}
+
+checkPersonalLevel();
+
+function showMyDB(privCheck){
+    if(privCheck == false) console.log(personalMovieDB);
+    else{
+        console.log(`It's private!`);
+    }
+}
+
+showMyDB(personalMovieDB.private);
+
+function enterYourFavGenres(){
+    let favGenre;
+    
+    for(let i = 0 ; i<3; ++i)
+    {
+        while(true)
+        {
+            favGenre = prompt(`Ваш улюблений жанр під номером ${i+1}`,``);
+            if(inputCheck(favGenre) && isNaN(favGenre))break;
+        }
+        personalMovieDB.genres.push(favGenre);
+    }
+}
+
+enterYourFavGenres();
+
