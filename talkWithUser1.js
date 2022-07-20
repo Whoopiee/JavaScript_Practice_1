@@ -1,7 +1,6 @@
 "use scrict";
 
 const numOfQuestions = 2; /*constant that have number of questions about films*/
-let numberOfFilms;
 
 /*Function that checks input string for conditions*/
 function inputCheck(check){
@@ -13,83 +12,94 @@ function inputCheck(check){
     }
 }
 
-function NumOfFilmsInputCheck() {
 
-    while(true)
-    {
-        numberOfFilms = prompt(`Скільки фільмів ви вже подивились?`,``);
-        if(inputCheck(numberOfFilms) && !isNaN(numberOfFilms))break;
-    }
-
-}
-
-NumOfFilmsInputCheck();
+//NumOfFilmsInputCheck();
 
 const personalMovieDB = {
-    count: numberOfFilms,
+    count: 0,
     movie: {},
     actors: {},
     genres: [],
-    private:false
-};
+    private:false,
 
-function addLastSeenFilm()
-{
-    for(let numOfMovies=0;numOfMovies<numOfQuestions;numOfMovies++)
+    NumOfFilmsInputCheck: function(){
+        while(true)
+        {
+            this.count = prompt(`Скільки фільмів ви вже подивились?`,``);
+            if(inputCheck(this.count) && !isNaN(this.count))break;
+        }
+    },
+
+    addLastSeenFilm: function(){
+        for(let numOfMovies=0;numOfMovies<numOfQuestions;numOfMovies++)
     {
         let firstQuestion,
             secondQuestion;
 
         while(true)
         {
-            firstQuestion = prompt(`Останній переглянутий фільм?`,``);
+            firstQuestion = prompt(`Останній переглянутий фільм?`,``).trim();
             if(inputCheck(firstQuestion))break;
         }
 
         while(true)
         {
-            secondQuestion = prompt(`Скількі балів ви дасте цьому фільму?`,``);
+            secondQuestion = prompt(`Скількі балів ви дасте цьому фільму?`,``).trim();
             if(inputCheck(secondQuestion) && !isNaN(secondQuestion))break;
         }
     
-        personalMovieDB.movie[firstQuestion] = secondQuestion;
+        this.movie[firstQuestion] = secondQuestion;
         
     }
-}
+    },
 
-addLastSeenFilm();
+    checkPersonalLevel: function(){
+        if(this.count<10){alert(`Доволі мало фільмів переглянуто`);}
+        else if(this.count>=10 && this.count<=30 ){alert(`Ви типовий глядач!`);}
+        else if (this.count>30){alert(`Ви кіноман!`);}
+        else {alert(`Помилка!`);}
+    },
 
-function checkPersonalLevel(){
-    if(personalMovieDB.count<10){alert(`Доволі мало фільмів переглянуто`);}
-    else if(personalMovieDB.count>=10 && personalMovieDB.count<=30 ){alert(`Ви типовий глядач!`);}
-    else if (personalMovieDB.count>30){alert(`Ви кіноман!`);}
-    else {alert(`Помилка!`);}
-}
-
-checkPersonalLevel();
-
-function showMyDB(privCheck){
-    if(privCheck == false) console.log(personalMovieDB);
-    else{
-        console.log(`It's private!`);
-    }
-}
-
-showMyDB(personalMovieDB.private);
-
-function enterYourFavGenres(){
-    let favGenre;
-    
-    for(let i = 0 ; i<3; ++i)
-    {
-        while(true)
-        {
-            favGenre = prompt(`Ваш улюблений жанр під номером ${i+1}`,``);
-            if(inputCheck(favGenre) && isNaN(favGenre))break;
+    showMyDB: function(){
+        if(this.private == false) console.log(personalMovieDB);
+        else{
+            console.log(`Об'єкт є приватним!`);
         }
-        personalMovieDB.genres.push(favGenre);
-    }
-}
+    },
 
-enterYourFavGenres();
+    enterYourFavGenres: function(){
+        let favGenre;
+    
+        for(let i = 0 ; i<3; ++i)
+        {
+            while(true)
+            {
+                favGenre = prompt(`Ваш улюблений жанр під номером ${i+1}`,``).trim();
+                if(inputCheck(favGenre) && isNaN(favGenre))break;
+            }
+            this.genres.push(favGenre);
+        }
+
+        this.genres.forEach((item,num)=>{
+            console.log(`Улюблений жанр #${num+1} - це ${item}`);
+        });
+    },
+
+    toggleVisibleMyDB: function(){
+        this.private == false ? this.private = true : this.private = false;
+    }
+};
+
+//personalMovieDB.NumOfFilmsInputCheck();
+
+//personalMovieDB.addLastSeenFilm();
+
+//personalMovieDB.checkPersonalLevel();
+
+personalMovieDB.toggleVisibleMyDB();
+
+personalMovieDB.showMyDB();
+
+
+personalMovieDB.enterYourFavGenres();
 
